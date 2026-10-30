@@ -1,0 +1,3730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Binary | Global Business Network</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Add dark theme variables */
+        :root {
+            --primary: #4A6FFF;
+            --primary-light: #EFF2FF;
+            --secondary: #FF6B8B;
+            --accent: #00D4AA;
+            --text-dark: #2D3748;
+            --text-light: #718096;
+            --background: #F9FAFB;
+            --card-bg: #FFFFFF;
+            --border: #E2E8F0;
+            --hover: #F7FAFC;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, #4A6FFF 0%, #00D4AA 100%);
+        }
+        
+        /* Dark theme */
+        body.dark-mode {
+            --primary: #5a7eff;
+            --primary-light: #1a202c;
+            --secondary: #ff7b9c;
+            --accent: #00e6b8;
+            --text-dark: #E2E8F0;
+            --text-light: #A0AEC0;
+            --background: #121826;
+            --card-bg: #1A202C;
+            --border: #2D3748;
+            --hover: #2D3748;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Logo image */
+        .logo-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 8px;
+        }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--hover);
+        }
+
+        /* Smaller chatbot window */
+        .chatbot-window {
+            width: 320px;
+            height: 450px;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        /* Notifications */
+        .notification-container {
+            position: relative;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background-color: var(--secondary);
+            color: white;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+        
+        .notification-dropdown {
+            position: absolute;
+            top: 55px;
+            right: -10px;
+            width: 320px;
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            display: none;
+            flex-direction: column;
+            z-index: 1002;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .notification-dropdown.active {
+            display: flex;
+        }
+        
+        .notification-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .notification-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .notification-item:hover {
+            background-color: var(--hover);
+        }
+        
+        .notification-item.unread {
+            background-color: var(--primary-light);
+        }
+        
+        .notif-content h5 {
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+        }
+        
+        .notif-content p {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+
+        /* Search suggestions */
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            padding: 15px;
+            display: none;
+            z-index: 1001;
+            border: 1px solid var(--border);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .suggestion-item {
+            padding: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: var(--radius-sm);
+        }
+
+        .suggestion-item:hover {
+            background-color: var(--hover);
+        }
+
+        /* Highlight search results */
+        .highlight {
+            background-color: rgba(255, 215, 0, 0.3);
+            padding: 2px 4px;
+            border-radius: 3px;
+            animation: highlight-pulse 2s infinite;
+        }
+
+        @keyframes highlight-pulse {
+            0% { background-color: rgba(255, 215, 0, 0.3); }
+            50% { background-color: rgba(255, 215, 0, 0.6); }
+            100% { background-color: rgba(255, 215, 0, 0.3); }
+        }
+
+        /* Saved Action Button Highlight */
+        .action-btn.saved {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* Standard CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Top Navigation */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+        }
+        
+        .dark-mode .top-nav {
+            background-color: rgba(30, 30, 30, 0.95);
+        }
+        
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        
+        .search-bar {
+            flex: 0 1 600px;
+            margin: 0 30px;
+            position: relative;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            font-size: 0.95rem;
+            background-color: var(--background);
+            transition: var(--transition);
+        }
+        
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 111, 255, 0.1);
+        }
+        
+        .search-bar button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+        
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .nav-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            position: relative;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .nav-icon:hover {
+            background-color: var(--hover);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background-color: var(--secondary);
+            color: white;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        
+        /* Points badge */
+        .points-badge {
+            background: linear-gradient(135deg, #FFD93D, #FF6B8B);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 10px;
+            animation: glow 2s infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 5px #FFD93D; }
+            to { box-shadow: 0 0 10px #FF6B8B; }
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 240px;
+            height: calc(100vh - 70px);
+            background-color: var(--card-bg);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 20px 0;
+            transition: var(--transition);
+            z-index: 999;
+        }
+        
+        .sidebar.hidden {
+            transform: translateX(-100%);
+            opacity: 0;
+            width: 0;
+        }
+        
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            margin: 4px 10px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+        
+        .sidebar-item:hover {
+            background-color: var(--hover);
+        }
+        
+        .sidebar-item.active {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .sidebar-icon {
+            font-size: 1.2rem;
+            margin-right: 15px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .sidebar-divider {
+            height: 1px;
+            background-color: var(--border);
+            margin: 20px 0;
+        }
+        
+        .sidebar-section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--text-light);
+            padding: 10px 20px;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 240px;
+            margin-top: 70px;
+            padding: 30px;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .main-content.expanded {
+            margin-left: 0;
+        }
+        
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .content-header h1 {
+            font-size: 2.2rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .create-post-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+        
+        .create-post-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        /* Create Post Modal */
+        .create-post-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2001;
+            backdrop-filter: blur(5px);
+        }
+        
+        .create-post-container {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        /* Stories Section */
+        .stories-container {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 0;
+            margin-bottom: 30px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--background);
+        }
+        
+        .stories-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .stories-container::-webkit-scrollbar-track {
+            background: var(--background);
+            border-radius: 3px;
+        }
+        
+        .stories-container::-webkit-scrollbar-thumb {
+            background-color: var(--primary);
+            border-radius: 3px;
+        }
+        
+        .story-item {
+            flex: 0 0 auto;
+            width: 100px;
+            height: 160px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 15px 10px;
+            color: white;
+        }
+        
+        .story-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .live-story {
+            border: 3px solid #FF0000;
+        }
+        
+        .live-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #FF0000;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            z-index: 2;
+        }
+        
+        .live-viewers {
+            font-size: 0.7rem;
+            opacity: 0.9;
+            margin-top: 3px;
+        }
+        
+        .story-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+            z-index: 2;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .story-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+            padding: 15px 10px;
+            z-index: 1;
+        }
+        
+        /* Feed Container */
+        .feed-container {
+            display: flex;
+            gap: 30px;
+            position: relative;
+        }
+        
+        .business-feed {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .right-sidebar-fixed {
+            flex: 1;
+            position: sticky;
+            top: 100px;
+            align-self: flex-start;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .right-sidebar-fixed::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .right-sidebar-fixed::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        
+        /* Post Card */
+        .post-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 0;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--border);
+            position: relative;
+        }
+        
+        .post-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-3px);
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px 24px;
+            position: relative;
+        }
+        
+        .live-indicator {
+            position: absolute;
+            top: 15px;
+            right: 24px;
+            background-color: #FF0000;
+            color: white;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .red-dot {
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border-radius: 50%;
+            animation: pulse-red 1.5s infinite;
+        }
+        
+        @keyframes pulse-red {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .post-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .post-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+        
+        .post-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .post-content {
+            margin-bottom: 20px;
+            padding: 0 24px;
+        }
+        
+        .post-content h2 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+        
+        .post-content p {
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+        
+        .post-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border-radius: var(--radius-sm);
+        }
+        
+        .business-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 0 24px;
+        }
+        
+        .business-tag {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        /* Reactions Container */
+        .reactions-container {
+            position: absolute;
+            bottom: 40px;
+            left: 20px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
+            padding: 8px 12px;
+            display: none;
+            gap: 8px;
+            z-index: 100;
+        }
+        
+        .reaction {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        
+        .reaction:hover {
+            transform: scale(1.3) translateY(-5px);
+        }
+        
+        .post-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 24px;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+        
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-light);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .action-btn:hover {
+            background-color: var(--hover);
+        }
+        
+        .action-btn.liked {
+            color: var(--secondary);
+        }
+        
+        .reaction-btn {
+            position: relative;
+        }
+        
+        /* Comments Section */
+        .comments-section {
+            padding: 15px 24px;
+            /* HIDDEN BY DEFAULT */
+            display: none; 
+            border-top: 1px solid var(--border);
+            margin-top: -1px; /* Overlap border */
+            background-color: var(--hover);
+            border-bottom-left-radius: var(--radius);
+            border-bottom-right-radius: var(--radius);
+        }
+        
+        .comment {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        
+        .comment-content {
+            background-color: var(--card-bg);
+            padding: 10px 15px;
+            border-radius: 18px;
+            flex: 1;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .comment-author {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .add-comment {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .add-comment input {
+            flex: 1;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 12px 20px;
+            color: var(--text-dark);
+        }
+        
+        .add-comment button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 24px;
+            cursor: pointer;
+        }
+        
+        /* Poll Feature */
+        .poll-container {
+            background-color: var(--hover);
+            padding: 20px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 20px;
+        }
+        
+        .poll-question {
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .poll-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+        
+        .poll-option:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .poll-option input {
+            margin-right: 10px;
+        }
+        
+        /* Memory Post */
+        .memory-post {
+            border-left: 4px solid var(--accent);
+        }
+        
+        .memory-header {
+            padding: 15px 24px;
+            background-color: var(--primary-light);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        /* Marketplace Section */
+        .marketplace-section {
+            margin-top: 30px;
+        }
+        
+        .marketplace-items {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .marketplace-item {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .marketplace-item:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        
+        .marketplace-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+        
+        .item-info {
+            padding: 12px;
+        }
+        
+        .item-info h4 {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .item-info p {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+        
+        /* Watch Section */
+        .video-feed {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .video-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .video-thumbnail {
+            position: relative;
+            height: 180px;
+            overflow: hidden;
+        }
+        
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .video-card:hover .video-thumbnail img {
+            transform: scale(1.05);
+        }
+        
+        .video-duration {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .video-card:hover .play-button {
+            opacity: 1;
+        }
+        
+        .video-info {
+            padding: 15px;
+        }
+        
+        .video-info h4 {
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+        
+        .video-info p {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+        
+        /* Groups Section */
+        .groups-section {
+            margin-top: 30px;
+        }
+        
+        .group-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .group-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .group-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .group-cover {
+            height: 100px;
+            background: var(--gradient);
+        }
+        
+        .group-info {
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .group-info h4 {
+            margin-bottom: 5px;
+        }
+        
+        .group-info p {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+        
+        .join-group-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        /* Saved Collections */
+        .saved-collections {
+            margin-top: 30px;
+        }
+        
+        .collection-folder {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 2px dashed var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .collection-folder:hover {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+        }
+        
+        .item-count {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            background-color: var(--background);
+            padding: 3px 8px;
+            border-radius: 12px;
+        }
+        
+        /* Events Calendar */
+        .event-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .event-time {
+            background-color: var(--primary);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 15px;
+            min-width: 70px;
+            text-align: center;
+        }
+        
+        .event-details {
+            flex: 1;
+        }
+        
+        .event-details h4 {
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+        
+        .event-details p {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+        
+        .join-btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        
+        /* Loading Indicator */
+        .loading-indicator {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        /* Data Saver Mode */
+        body.data-saver-mode .post-image {
+            filter: blur(5px);
+            cursor: pointer;
+        }
+        
+        body.data-saver-mode .post-image:hover {
+            filter: none;
+        }
+        
+        /* Right Sidebar Cards */
+        .sidebar-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 25px;
+        }
+        
+        .sidebar-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .suggested-business {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .suggested-business:hover {
+            padding-left: 10px;
+        }
+        
+        .suggested-business:last-child {
+            border-bottom: none;
+        }
+        
+        .suggested-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .suggested-info h4 {
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+        
+        .suggested-info p {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+        
+        .follow-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-left: auto;
+            transition: var(--transition);
+        }
+        
+        .follow-btn:hover {
+            background-color: #3a5fe0;
+        }
+        
+        /* Ads in Sidebar */
+        .ad-card {
+            background-color: var(--hover);
+            padding: 15px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .ad-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+        }
+        
+        .ad-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .ad-description {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+        
+        .ad-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        /* Chatbot */
+        .chatbot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+        
+        .chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(74, 111, 255, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(74, 111, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(74, 111, 255, 0); }
+        }
+        
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .chatbot-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 320px;
+            height: 400px;
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            border: 1px solid var(--border);
+        }
+        
+        .chatbot-header {
+            padding: 20px;
+            background: var(--gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .chatbot-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chatbot-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background-color: var(--background);
+        }
+        
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.4;
+            font-size: 0.95rem;
+        }
+        
+        .bot-message {
+            background-color: var(--card-bg);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+            box-shadow: var(--shadow);
+        }
+        
+        .user-message {
+            background: var(--gradient);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 12px 16px;
+            background-color: var(--card-bg);
+            border-radius: 18px;
+            align-self: flex-start;
+            box-shadow: var(--shadow);
+        }
+        
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--text-light);
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-indicator span:nth-child(1) { animation-delay: 0s; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
+        }
+        
+        .chatbot-input {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+            background-color: var(--card-bg);
+        }
+        
+        .chatbot-input input {
+            flex: 1;
+            background-color: var(--background);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 12px 20px;
+            color: var(--text-dark);
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+        }
+        
+        .chatbot-input input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 111, 255, 0.1);
+        }
+        
+        .chatbot-input button {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .chatbot-input button:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Quick Replies */
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .quick-reply-btn {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .quick-reply-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* Business Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .business-modal {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .modal-close:hover {
+            color: var(--text-dark);
+        }
+        
+        .modal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .modal-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+        
+        /* Business color assignments */
+        .color-1 { background: linear-gradient(135deg, #4A6FFF, #3a5fe0); }
+        .color-2 { background: linear-gradient(135deg, #FF6B8B, #e05a7a); }
+        .color-3 { background: linear-gradient(135deg, #00D4AA, #00b894); }
+        .color-4 { background: linear-gradient(135deg, #FFC145, #e6ac2d); }
+        .color-5 { background: linear-gradient(135deg, #9D6CFF, #8253e6); }
+        .color-6 { background: linear-gradient(135deg, #4AC6FF, #2db0e6); }
+        .color-7 { background: linear-gradient(135deg, #FF8A4C, #e6732d); }
+        .color-8 { background: linear-gradient(135deg, #9b5de5, #7b3cc0); }
+        .color-9 { background: linear-gradient(135deg, #FF4D94, #e63c83); }
+        .color-10 { background: linear-gradient(135deg, #00C9FF, #00a8e0); }
+        .color-11 { background: linear-gradient(135deg, #FFD93D, #e6c02d); }
+        .color-12 { background: linear-gradient(135deg, #6BCF7F, #5ab86d); }
+        .color-13 { background: linear-gradient(135deg, #A459D1, #8c48b8); }
+        .color-14 { background: linear-gradient(135deg, #FF7B54, #e6693d); }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .sidebar:not(.hidden) {
+                width: 80px;
+            }
+            
+            .sidebar:not(.hidden) .sidebar-item span {
+                display: none;
+            }
+            
+            .sidebar:not(.hidden) .sidebar-icon {
+                margin-right: 0;
+            }
+            
+            .main-content:not(.expanded) {
+                margin-left: 80px;
+            }
+            
+            .marketplace-items {
+                grid-template-columns: 1fr;
+            }
+            
+            .group-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .feed-container {
+                flex-direction: column;
+            }
+            
+            .right-sidebar-fixed {
+                position: static;
+                height: auto;
+                overflow-y: visible;
+                order: -1;
+                margin-bottom: 30px;
+            }
+            
+            .video-feed {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .search-bar {
+                display: none;
+            }
+            
+            .nav-icons {
+                gap: 10px;
+            }
+            
+            .main-content {
+                padding: 20px 15px;
+            }
+            
+            .chatbot-window {
+                width: calc(100vw - 40px);
+                right: -20px;
+            }
+            
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .video-feed {
+                grid-template-columns: 1fr;
+            }
+            
+            .group-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+/* Add this to your CSS */
+.premium-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: auto; /* Pushes icon to the far right in sidebar */
+    object-fit: contain;
+}
+
+/* Specific adjustment for Right Sidebar headers to keep icon close to text */
+.sidebar-card h3 .premium-icon {
+    margin-left: 10px; 
+}
+
+/*Premium PopUp */
+
+/* Premium Modal Styles */
+.premium-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    z-index: 3000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.premium-modal-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.premium-modal-card {
+    background: var(--card-bg);
+    width: 100%;
+    max-width: 400px;
+    border-radius: 24px;
+    padding: 40px 30px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    transform: translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.premium-modal-overlay.active .premium-modal-card {
+    transform: translateY(0);
+}
+
+.premium-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.2rem;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.premium-modal-close:hover {
+    color: var(--text-dark);
+}
+
+.premium-icon-glow {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 2rem;
+    color: white;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    animation: premium-pulse 2s infinite;
+}
+
+@keyframes premium-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+}
+
+.premium-modal-card h2 {
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #FFD700, #DAA520);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 1.8rem;
+}
+
+.premium-modal-card p {
+    color: var(--text-light);
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+.premium-benefits {
+    list-style: none;
+    text-align: left;
+    margin-bottom: 30px;
+    background: var(--background);
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.premium-benefits li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-dark);
+    font-size: 0.9rem;
+}
+
+.premium-benefits li i {
+    color: #FFD700;
+}
+
+.premium-benefits li:last-child {
+    margin-bottom: 0;
+}
+
+.premium-btn-primary {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #1a202c;
+    border: none;
+    width: 100%;
+    padding: 14px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+    margin-bottom: 10px;
+}
+
+.premium-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+}
+
+.premium-btn-secondary {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.premium-btn-secondary:hover {
+    color: var(--text-dark);
+}
+
+
+
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="container nav-container">
+            <div class="logo-container">
+                <div class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars nav-icon"></i>
+                </div>
+                <a href="#" class="logo">
+                    <img src="https://placehold.co/32x32/4A6FFF/FFFFFF?text=WB&font=poppins" alt="Web Binary Logo" class="logo-img">
+                    Web Binary
+                </a>
+                <div class="points-badge" id="userPoints">150 pts</div>
+            </div>
+            
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search businesses, services, or updates...">
+                <button type="submit"><i class="fas fa-search"></i></button>
+                <div class="search-suggestions" id="searchSuggestions"></div>
+            </div>
+            
+            <div class="nav-icons">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            <!--<div class="nav-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <div class="nav-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+            -->
+                    <div class="nav-icon" id="notificationIcon">
+                        <i class="fas fa-bell"></i>
+                        <div class="notification-badge">3</div>
+                        <div class="notification-dropdown" id="notificationDropdown">
+                         <div class="notification-header">
+                             <span>Notifications</span>
+                             <span style="font-size:0.8rem; color:var(--primary); cursor:pointer;">Mark all as read</span>
+                         </div>
+                         <div class="notification-list" id="notificationList">
+                              <div class="notification-item unread">
+                                  <div class="user-avatar" style="width:30px; height:30px; font-size:0.8rem;">W</div>
+                                  <div class="notif-content">
+                                      <h5>New post from Caffe Tara</h5>
+                                      <p>Just now</p>
+                                  </div>
+                              </div>
+                              <div class="notification-item unread">
+                                  <div class="user-avatar" style="width:30px; height:30px; font-size:0.8rem;">E</div>
+                                  <div class="notif-content">
+                                      <h5>Event starting in 30 minutes</h5>
+                                      <p>5 minutes ago</p>
+                                  </div>
+                               </div>
+                              <div class="notification-item unread">
+                                   <div class="user-avatar" style="width:30px; height:30px; font-size:0.8rem;">L</div>
+                                   <div class="notif-content">
+                                       <h5>Someone liked your comment</h5>
+                                       <p>1 hour ago</p>
+                                    </div>
+                             </div>
+                                           </div>
+                       </div>
+                    </div>
+
+            <!--<div class="nav-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+                <div class="nav-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="nav-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+            -->
+                <div class="nav-icon" id="dataSaverToggle" title="Data Saver">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <div class="user-avatar">P</div>
+            </div>
+        </div>
+    </nav>
+    
+    <aside class="sidebar" id="sidebar">
+        <a href="#dashboardnav" class="sidebar-item active">
+            <i class="fas fa-home sidebar-icon"></i>
+            <span>Dashboard</span>
+        </a>
+    <!--<a href="#" class="sidebar-item">
+            <i class="fas fa-building sidebar-icon"></i>
+            <span>Businesses</span>
+            <img src="premium.png" class="premium-icon" alt="Premium">
+        </a>
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-compass sidebar-icon"></i>
+            <span>Explore</span>
+            <img src="premium.png" class="premium-icon" alt="Premium">
+        </a>
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-user-friends sidebar-icon"></i>
+            <span>Network</span>
+            <img src="premium.png" class="premium-icon" alt="Premium">
+        </a>
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-calendar-alt sidebar-icon"></i>
+            <span>Events</span>
+            <img src="premium.png" class="premium-icon" alt="Premium">
+        </a>
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-shopping-cart sidebar-icon"></i>
+            <span>Marketplace</span>
+            <img src="premium.png" class="premium-icon" alt="Premium">
+        </a>
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-gamepad sidebar-icon"></i>
+            <span>Games</span>
+            <img src="premium.png" class="premium-icon" alt="Premium">
+        </a>
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-briefcase sidebar-icon"></i>
+            <span>Jobs</span>
+            <img src="premium.png" class="premium-icon" alt="Premium">
+        </a>
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-tv sidebar-icon"></i>
+            <span>Watch</span>
+            <img src="premium.png" class="premium-icon" alt="Premium">
+        </a>
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-bookmark sidebar-icon"></i>
+            <span>Saved</span>
+            <img src="premium.png" class="premium-icon" alt="Premium">
+        </a>
+    -->   
+     
+        <div class="sidebar-divider"></div>
+        
+        <div class="sidebar-section-title">Webbinary Subsidiaries</div>
+        
+        <a href="#" class="sidebar-item" data-business="sentinel">
+            <i class="fas fa-shield-alt sidebar-icon"></i>
+            <span>Sentinel Labs</span>
+        </a>
+        <a href="#" class="sidebar-item" data-business="edunova">
+            <i class="fas fa-graduation-cap sidebar-icon"></i>
+            <span>EduNova</span>
+        </a>
+        <a href="#" class="sidebar-item" data-business="navyug">
+            <i class="fas fa-rocket sidebar-icon"></i>
+            <span>Navyug Space</span>
+        </a>
+        <a href="#" class="sidebar-item" data-business="mercurion">
+            <i class="fas fa-atom sidebar-icon"></i>
+            <span>Mercurion Labs</span>
+        </a>
+        <a href="#" class="sidebar-item" data-business="caffe">
+            <i class="fas fa-coffee sidebar-icon"></i>
+            <span>Caffe Tara</span>
+        </a>
+        <a href="#" class="sidebar-item" data-business="saffron">
+            <i class="fas fa-utensils sidebar-icon"></i>
+            <span>Saffron Soul</span>
+        </a>
+
+        <div class="sidebar-divider"></div>
+        
+        <div class="sidebar-section-title">Legal Hub</div>
+        
+        <a href="legal.html#privacy_policy" class="sidebar-item">
+            <i class="fas fa-user-shield sidebar-icon"></i>
+            <span>Privacy Policy</span>
+        </a>
+        <a href="legal.html#terms_and_conditions" class="sidebar-item">
+            <i class="fas fa-file-contract sidebar-icon"></i>
+            <span>Terms & Conditions (T&C)</span>
+        </a>
+        <a href="legal.html#refund_and_cancellation_policy" class="sidebar-item">
+            <i class="fas fa-undo sidebar-icon"></i>
+            <span>Refund & Cancellation Policy</span>
+        </a>
+        <a href="legal.html#cookie_policy" class="sidebar-item">
+            <i class="fas fa-cookie-bite sidebar-icon"></i>
+            <span>Cookie Policy</span>
+        </a>
+        <a href="legal.html#about_us" class="sidebar-item">
+            <i class="fas fa-info-circle sidebar-icon"></i>
+            <span>About Us</span>
+        </a>
+        <a href="legal.html#contact_us" class="sidebar-item">
+            <i class="fas fa-envelope sidebar-icon"></i>
+            <span>Contact Us</span>
+        </a>
+        <a href="legal.html#community_guidelines" class="sidebar-item">
+            <i class="fas fa-users-cog sidebar-icon"></i>
+            <span>Community Guidelines</span>
+        </a>
+        
+        <div class="sidebar-divider"></div>
+        
+<!--   <div class="sidebar-section-title">Shortcuts</div>
+        
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-user-group sidebar-icon"></i>
+            <span>Groups</span>
+        </a>
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-video sidebar-icon"></i>
+            <span>Live</span>
+        </a>
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-clock sidebar-icon"></i>
+            <span>Memories</span>
+        </a>
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-cog sidebar-icon"></i>
+            <span>Settings</span>
+        </a>
+    -->
+
+    </aside>
+    
+    <main class="main-content" id="mainContent">
+        <div class="content-header">
+            <h1 id="dashboardnav">Web Binary Business Hub</h1>
+            <button class="create-post-btn" id="createPostBtn">
+                <i class="fas fa-plus"></i> Create Post
+            </button>
+        </div>
+        
+        <div class="stories-container">
+            <a href="legal.html#privacy_policy"><div class="story-item color-1">
+                
+                <img src="https://placehold.co/100x160/4A6FFF/FFFFFF?text=Web Binary" alt="Story" class="post-image">
+                <div class="story-overlay">
+                    <div class="story-title">Privacy Policy</div>
+                    
+                </div>
+            </div></a>
+            
+            <a href="legal.html#terms_and_conditions"><div class="story-item color-2">
+                <img src="https://placehold.co/100x160/FF6B8B/FFFFFF?text=Web Binary" alt="Story" class="post-image">
+                <div class="story-overlay">
+                    <div class="story-title">Terms and Conditions</div>
+                </div>
+            </div></a>
+
+            <a href="legal.html#refund_and_cancellation_policy"><div class="story-item color-3">
+               
+                <img src="https://placehold.co/100x160/00D4AA/FFFFFF?text=Web Binary" alt="Story" class="post-image">
+                <div class="story-overlay">
+                    <div class="story-title">Refund and Cancellation Policy</div>
+                  
+                </div>
+            </div></a>
+
+            <a href="legal.html#cookie_policy"><div class="story-item color-4">
+                <img src="https://placehold.co/100x160/FFC145/FFFFFF?text=Web Binary" alt="Story" class="post-image">
+                <div class="story-overlay">
+                    <div class="story-title">Cookie Policy</div>
+                </div>
+            </div></a>
+
+            <a href="legal.html#about_us"><div class="story-item color-5">
+                <img src="https://placehold.co/100x160/9D6CFF/FFFFFF?text=Web Binary" alt="Story" class="post-image">
+                <div class="story-overlay">
+                    <div class="story-title">About Us</div>
+                </div>
+            </div></a>
+
+            <a href="legal.html#contact_us"><div class="story-item color-6">
+                <img src="https://placehold.co/100x160/4AC6FF/FFFFFF?text=Web Binary" alt="Story" class="post-image">
+                <div class="story-overlay">
+                    <div class="story-title">Contact Us</div>
+                </div>
+            </div></a>
+
+            <a href="legal.html#community_guidelines"><div class="story-item color-7">
+                <img src="https://placehold.co/100x160/FF8A4C/FFFFFF?text=Web Binary" alt="Story" class="post-image">
+                <div class="story-overlay">
+                    <div class="story-title">Community Guidelines</div>
+                </div>
+            </div></a>
+
+            <a href="legal.html#global_compliance"><div class="story-item color-2">
+                <img src="https://placehold.co/100x160/FF6B8B/FFFFFF?text=Web Binary" alt="Story" class="post-image">
+                <div class="story-overlay">
+                    <div class="story-title">Global Compliance</div>
+                </div>
+            </div></a>
+
+            <a href="legal.html#strategic_compliance"><div class="story-item color-1">
+                <img src="https://placehold.co/100x160/4A6FFF/FFFFFF?text=Web Binary" alt="Story" class="post-image">
+                <div class="story-overlay">
+                    <div class="story-title">Strategic Compliance</div>
+                </div>
+            </div></a>
+
+
+        </div>
+        
+        <div class="feed-container">
+            <div class="business-feed" id="businessFeed">
+                <div class="post-card memory-post">
+                    <div class="memory-header">
+                        <i class="fas fa-history"></i> On this day last year
+                    </div>
+                    <div class="post-content">
+                        <h2>Web Binary Brew Launched Winter Special Blend!</h2>
+                        <p>Exactly one year ago, we introduced our award-winning winter spice coffee blend that sold out in 48 hours!</p>
+                       <img src="https://placehold.co/600x300/4A6FFF/FFFFFF?text=Coffee+Blend+Launch" alt="Memory" class="post-image">
+                    </div>
+                    <div class="post-actions">
+                        <button class="action-btn like-btn">
+                            <i class="far fa-heart"></i> 156
+                        </button>
+                        <button class="action-btn comment-btn">
+                            <i class="far fa-comment"></i> 42
+                        </button>
+                        <button class="action-btn share-btn">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                    </div>
+                    <div class="comments-section">
+                        <div class="comment">
+                            <div class="comment-avatar">A</div>
+                            <div class="comment-content">
+                                <div class="comment-author">Alice Johnson</div>
+                                <p>I remember this! Best coffee ever.</p>
+                            </div>
+                        </div>
+                        <div class="add-comment">
+                            <input type="text" placeholder="Write a comment...">
+                            <button>Post</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="post-avatar color-9">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="post-info">
+                            <h3>Sentinel Labs</h3>
+                            <p>4 hours ago · <i class="fas fa-globe-americas"></i> Private</p>
+                        </div>
+                        <div class="live-indicator">
+                            <span class="red-dot"></span> LIVE NOW
+                        </div>
+                    </div>
+                    
+                    <div class="post-content">
+                        <h2>Advanced Threat Intelligence Platform Launched</h2>
+                        <p>Our new AI-powered threat intelligence platform can now predict cyber attacks with 94% accuracy by analyzing global threat patterns. Already adopted by 3 government agencies and 12 enterprise clients.</p>
+                        <img src="https://placehold.co/600x400/4A6FFF/FFFFFF?text=Threat+Intelligence+Platform" alt="Threat Intelligence Platform" class="post-image">
+                        
+                        <div class="business-tags">
+                            <span class="business-tag">#Cybersecurity</span>
+                            <span class="business-tag">#AI</span>
+                            <span class="business-tag">#ThreatIntelligence</span>
+                            <span class="business-tag">#Innovation</span>
+                            <span class="business-tag">#TechNews</span>
+                        </div>
+                    </div>
+                    
+                    <div class="post-actions">
+                        <button class="action-btn reaction-btn">
+                            <i class="far fa-thumbs-up"></i> Like
+                            <div class="reactions-container">
+                                <span class="reaction">👍</span>
+                                <span class="reaction">❤️</span>
+                                <span class="reaction">😮</span>
+                                <span class="reaction">😆</span>
+                                <span class="reaction">😢</span>
+                                <span class="reaction">😡</span>
+                            </div>
+                        </button>
+                        <button class="action-btn comment-btn">
+                            <i class="far fa-comment"></i> 24
+                        </button>
+                        <button class="action-btn share-btn">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                        <button class="action-btn save-btn">
+                            <i class="far fa-bookmark"></i> Save
+                        </button>
+                    </div>
+                    
+                    <div class="comments-section">
+                        <div class="comment">
+                            <div class="comment-avatar">A</div>
+                            <div class="comment-content">
+                                <div class="comment-author">Alice Johnson</div>
+                                <p>This is groundbreaking! How can I learn more?</p>
+                            </div>
+                        </div>
+                        <div class="comment">
+                            <div class="comment-avatar">B</div>
+                            <div class="comment-content">
+                                <div class="comment-author">Bob Smith</div>
+                                <p>Impressive accuracy rate. Congrats!</p>
+                            </div>
+                        </div>
+                        <div class="add-comment">
+                            <input type="text" placeholder="Write a comment...">
+                            <button>Post</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="post-avatar color-11">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div class="post-info">
+                            <h3>Navyug Space</h3>
+                            <p>1 day ago · <i class="fas fa-globe-americas"></i> Public</p>
+                        </div>
+                    </div>
+                    
+                    <div class="post-content">
+                        <h2>Successful Test Launch of Reusable Rocket System</h2>
+                        <p>Navyug Space has successfully completed the third test launch of our reusable rocket system. The test achieved a record 92% recovery rate of the first stage booster, bringing us closer to commercial operations.</p>
+                        
+                        <div class="poll-container">
+                            <div class="poll-question">What excites you most about space tech?</div>
+                            <div class="poll-option">
+                                <input type="radio" name="poll" id="poll1">
+                                <label for="poll1">Reusable Rockets</label>
+                            </div>
+                            <div class="poll-option">
+                                <input type="radio" name="poll" id="poll2">
+                                <label for="poll2">Space Tourism</label>
+                            </div>
+                            <div class="poll-option">
+                                <input type="radio" name="poll" id="poll3">
+                                <label for="poll3">Satellite Networks</label>
+                            </div>
+                            <button class="ad-btn vote-btn">Vote</button>
+                        </div>
+                        
+                        <div class="business-tags">
+                            <span class="business-tag">#SpaceTech</span>
+                            <span class="business-tag">#RocketLaunch</span>
+                            <span class="business-tag">#Innovation</span>
+                            <span class="business-tag">#Future</span>
+                            <span class="business-tag">#Exploration</span>
+                        </div>
+                    </div>
+                    
+                    <div class="post-actions">
+                        <button class="action-btn reaction-btn">
+                            <i class="far fa-thumbs-up"></i> 214
+                            <div class="reactions-container">
+                                <span class="reaction">👍</span>
+                                <span class="reaction">❤️</span>
+                                <span class="reaction">😮</span>
+                                <span class="reaction">😆</span>
+                                <span class="reaction">😢</span>
+                                <span class="reaction">😡</span>
+                            </div>
+                        </button>
+                        <button class="action-btn comment-btn">
+                            <i class="far fa-comment"></i> 67
+                        </button>
+                        <button class="action-btn share-btn">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                        <button class="action-btn save-btn">
+                            <i class="far fa-bookmark"></i> Save
+                        </button>
+                    </div>
+                     <div class="comments-section">
+                        <div class="add-comment">
+                            <input type="text" placeholder="Write a comment...">
+                            <button>Post</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="loading-indicator" id="loadingIndicator">
+                    <div class="typing-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-sidebar-fixed">
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-store"></i> Subscriptions</h3>
+                    <div class="marketplace-items">
+                        <div class="marketplace-item">
+                            <img src="https://placehold.co/300x100/4A6FFF/FFFFFF?text=Premium+Security" alt="Item">
+                            <div class="item-info">
+                                <h4>Premium Security</h4>
+                                <p>LKR 40 000 per month · Web Binary Premium</p>
+                            </div>
+                        </div>
+                        <div class="marketplace-item">
+                            <img src="https://placehold.co/300x100/00D4AA/FFFFFF?text=Gold+Security" alt="Item">
+                            <div class="item-info">
+                                <h4>Gold Security</h4>
+                                <p>LKR 30 000 per month · Web Binary Gold</p>
+                            </div>
+                        </div>
+                        <div class="marketplace-item">
+                            <img src="https://placehold.co/300x100/FF6B8B/FFFFFF?text=Silver+Security" alt="Item">
+                            <div class="item-info">
+                                <h4>Silver Security</h4>
+                                <p>LKR 10 000 per month · Web Binary Silver</p>
+                            </div>
+                        </div>
+                        <div class="marketplace-item">
+                            <img src="https://placehold.co/300x100/FFC145/FFFFFF?text=Bronze+Security" alt="Item">
+                            <div class="item-info">
+                                <h4>Bronze Security</h4>
+                                <p>LKR 5 000 per month · Web Binary Bronze</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+<!--            <div class="sidebar-card">
+                    <h3><i class="fas fa-calendar-day"></i> Today's Events</h3>
+                    
+                    <div class="event-item">
+                        <div class="event-time">10:00 AM</div>
+                        <div class="event-details">
+                            <h4>Investor Meeting</h4>
+                            <p>Quarterly review</p>
+                        </div>
+                        <button class="join-btn">Join</button>
+                    </div>
+                    
+                    <div class="event-item">
+                        <div class="event-time">02:30 PM</div>
+                        <div class="event-details">
+                            <h4>Tech Demo</h4>
+                            <p>New AI features</p>
+                        </div>
+                        <button class="join-btn">Join</button>
+                    </div>
+                    
+                    <div class="event-item">
+                        <div class="event-time">06:00 PM</div>
+                        <div class="event-details">
+                            <h4>Networking Mixer</h4>
+                            <p>Industry leaders</p>
+                        </div>
+                        <button class="join-btn">RSVP</button>
+                    </div>
+                </div>
+                
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-bookmark"></i> Saved Collections</h3>
+                    
+                    <div class="collection-folder" data-category="investments">
+                        <h4>Investment Opportunities</h4>
+                        <span class="item-count">12 items</span>
+                    </div>
+                    
+                    <div class="collection-folder" data-category="research">
+                        <h4>Research Papers</h4>
+                        <span class="item-count">8 items</span>
+                    </div>
+                    
+                    <div class="collection-folder" data-category="events">
+                        <h4>Upcoming Events</h4>
+                        <span class="item-count">5 items</span>
+                    </div>
+                </div>
+                
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-hashtag"></i> Trending Topics</h3>
+                    
+                    <div class="business-tags" style="margin-top: 10px; flex-wrap: wrap; gap: 8px;">
+                        <span class="business-tag">#Cybersecurity</span>
+                        <span class="business-tag">#SpaceTech</span>
+                        <span class="business-tag">#EdTech</span>
+                        <span class="business-tag">#SustainableEnergy</span>
+                        <span class="business-tag">#AI</span>
+                        <span class="business-tag">#Quantum</span>
+                        <span class="business-tag">#Innovation</span>
+                    </div>
+                </div>
+                
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-ad"></i> Sponsored</h3>
+                    
+                    <div class="ad-card">
+                        <img src="https://placehold.co/300x150/4A6FFF/FFFFFF?text=Caffe+Tara+Ad" alt="Ad" class="ad-image">
+                        <div class="ad-title">Discover Caffe Tara</div>
+                        <p class="ad-description">Try our new winter blend today!</p>
+                        <button class="ad-btn">Shop Now<img src="premium.png" class="premium-icon" alt="Premium"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    -->    
+        <div class="video-feed" id="watchSection" style="display: none;">
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <img src="https://placehold.co/320x180/4A6FFF/FFFFFF?text=Space+Launch" alt="Video">
+                    <div class="video-duration">12:45</div>
+                    <div class="play-button"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="video-info">
+                    <h4>Inside Navyug Space Launch</h4>
+                    <p>Web Binary AeroSpace · 24K views · 2 days ago</p>
+                </div>
+            </div>
+            
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <img src="https://placehold.co/320x180/00D4AA/FFFFFF?text=AI+Demo" alt="Video">
+                    <div class="video-duration">08:22</div>
+                    <div class="play-button"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="video-info">
+                    <h4>AI Threat Detection Demo</h4>
+                    <p>Sentinel Labs · 18K views · 1 week ago</p>
+                </div>
+            </div>
+            
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <img src="https://placehold.co/320x180/FF6B8B/FFFFFF?text=Coffee+Brewing" alt="Video">
+                    <div class="video-duration">05:30</div>
+                    <div class="play-button"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="video-info">
+                    <h4>Perfect Coffee Brewing Guide</h4>
+                    <p>Caffe Tara · 42K views · 3 days ago</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="groups-section" id="groupsSection" style="display: none;">
+            <h3>Groups You Might Like</h3>
+            <div class="group-grid">
+                <div class="group-card">
+                    <div class="group-cover color-1"></div>
+                    <div class="group-info">
+                        <h4>Startup Founders</h4>
+                        <p>45K members · 12 posts today</p>
+                        <button class="join-group-btn">Join Group</button>
+                    </div>
+                </div>
+                
+                <div class="group-card">
+                    <div class="group-cover color-3"></div>
+                    <div class="group-info">
+                        <h4>Tech Innovators</h4>
+                        <p>32K members · 8 posts today</p>
+                        <button class="join-group-btn">Join Group</button>
+                    </div>
+                </div>
+                
+                <div class="group-card">
+                    <div class="group-cover color-5"></div>
+                    <div class="group-info">
+                        <h4>Space Enthusiasts</h4>
+                        <p>28K members · 15 posts today</p>
+                        <button class="join-group-btn">Join Group</button>
+                    </div>
+                </div>
+                
+                <div class="group-card">
+                    <div class="group-cover color-7"></div>
+                    <div class="group-info">
+                        <h4>Food & Beverage</h4>
+                        <p>19K members · 6 posts today</p>
+                        <button class="join-group-btn">Join Group</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div class="create-post-modal" id="createPostModal">
+        <div class="create-post-container">
+            <h3>Create Post</h3>
+            <div style="display: flex; align-items: center; margin: 20px 0;">
+                <div class="post-avatar color-1" style="width: 40px; height: 40px; margin-right: 10px;">
+                    P
+                </div>
+                <div>
+                    <h4>Your Name</h4>
+                    <p>Posting to: Public</p>
+                </div>
+            </div>
+            <textarea id="postContent" placeholder="What's on your mind?" style="width: 100%; height: 150px; padding: 15px; border: 1px solid var(--border); border-radius: var(--radius); font-family: 'Inter', sans-serif; resize: vertical;"></textarea>
+            <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+                <button id="cancelPostBtn" style="background: none; border: 1px solid var(--border); padding: 10px 20px; border-radius: var(--radius); cursor: pointer;">Cancel</button>
+                <button id="submitPostBtn" style="background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: var(--radius); cursor: pointer;">Post</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="chatbot-container">
+        <div class="chatbot-toggle" id="chatbotToggle">
+            <i class="fas fa-robot"></i>
+        </div>
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <h3><i class="fas fa-robot"></i> Web Binary Assistant</h3>
+                <button class="chatbot-close" id="closeChatbot">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chatbot-body" id="chatbotBody">
+                <div class="message bot-message">
+                    Hello! I'm your Web Binary AI assistant. I can help you explore our businesses, answer questions, or connect you with the right team. How can I assist you today?
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbotInput" placeholder="Ask about Web Binary businesses...">
+                <button id="sendMessage">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="businessModal">
+        <div class="business-modal">
+            <button class="modal-close" id="closeModal">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="modal-header">
+                <div class="modal-avatar color-9" id="modalAvatar">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div>
+                    <h2 id="modalTitle">Sentinel Labs</h2>
+                    <p id="modalSubtitle">Advanced Cybersecurity Research</p>
+                </div>
+            </div>
+            
+            <div id="modalContent">
+                </div>
+        </div>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const chatbotToggle = document.getElementById('chatbotToggle');
+        const chatbotWindow = document.getElementById('chatbotWindow');
+        const closeChatbot = document.getElementById('closeChatbot');
+        const chatbotBody = document.getElementById('chatbotBody');
+        const chatbotInput = document.getElementById('chatbotInput');
+        const sendMessageBtn = document.getElementById('sendMessage');
+        const createPostBtn = document.getElementById('createPostBtn');
+        const createPostModal = document.getElementById('createPostModal');
+        const cancelPostBtn = document.getElementById('cancelPostBtn');
+        const submitPostBtn = document.getElementById('submitPostBtn');
+        const postContent = document.getElementById('postContent');
+        const businessModal = document.getElementById('businessModal');
+        const closeModal = document.getElementById('closeModal');
+        const sidebarItems = document.querySelectorAll('.sidebar-item[data-business]');
+        const dataSaverToggle = document.getElementById('dataSaverToggle');
+        const userPoints = document.getElementById('userPoints');
+        const businessFeed = document.getElementById('businessFeed');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const themeToggle = document.getElementById('themeToggle');
+        const searchInput = document.getElementById('searchInput');
+        const searchSuggestions = document.getElementById('searchSuggestions');
+        const notificationIcon = document.getElementById('notificationIcon');
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const notificationBadge = document.querySelector('.notification-badge');
+        
+        // Infinite Scroll Variables
+        let page = 1;
+        const postsPerPage = 2;
+        let isLoading = false;
+        let userPointsCount = 150;
+        
+        // Search data
+        const searchData = [
+            "Web Binary", "Sentinel Labs", "Cybersecurity", "AI", "Threat Intelligence",
+            "Navyug Space", "Rocket Launch", "Space Technology", "Caffe Tara", "Coffee",
+            "Marketplace", "Events", "Webinar", "Live Stream", "Business Network",
+            "Tech Innovations", "Quantum Computing", "Brew", "Gastronomy", "AeroSpace",
+            "Research", "Academy", "Digital", "Security", "Innovation", "Technology"
+        ];
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide loading indicator initially
+            loadingIndicator.style.display = 'none';
+            
+            // Add gamification points
+            updatePointsDisplay();
+            
+            // Set up real-time updates
+            simulateLiveUpdates();
+            
+            // Set up infinite scroll
+            setupInfiniteScroll();
+            
+            // Set up reactions
+            setupReactions();
+            
+            // Set up quick replies for chatbot
+            addQuickReplies();
+            
+            // Initialize theme
+            initTheme();
+            
+            // Initialize search
+            initSearch();
+            
+            // Initialize notifications
+            initNotifications();
+        });
+        
+        // Theme toggle functionality
+        function initTheme() {
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const icon = themeToggle.querySelector('i');
+                if (document.body.classList.contains('dark-mode')) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+            });
+        }
+        
+        // Search functionality
+        function initSearch() {
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                searchSuggestions.innerHTML = '';
+                
+                if (query.length > 0) {
+                    const matches = searchData.filter(item => 
+                        item.toLowerCase().includes(query)
+                    );
+                    
+                    if (matches.length > 0) {
+                        matches.forEach(match => {
+                            const div = document.createElement('div');
+                            div.className = 'suggestion-item';
+                            div.textContent = match;
+                            div.addEventListener('click', () => {
+                                searchInput.value = match;
+                                searchSuggestions.style.display = 'none';
+                                performSearch(match);
+                            });
+                            searchSuggestions.appendChild(div);
+                        });
+                        searchSuggestions.style.display = 'block';
+                    } else {
+                        const div = document.createElement('div');
+                        div.className = 'suggestion-item';
+                        div.textContent = 'No matches found';
+                        searchSuggestions.appendChild(div);
+                        searchSuggestions.style.display = 'block';
+                    }
+                } else {
+                    searchSuggestions.style.display = 'none';
+                }
+            });
+            
+            // Close suggestions when clicking elsewhere
+            document.addEventListener('click', (e) => {
+                if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
+                    searchSuggestions.style.display = 'none';
+                }
+            });
+            
+            // Perform search on Enter key
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch(searchInput.value);
+                    searchSuggestions.style.display = 'none';
+                }
+            });
+            
+            // Search button click
+            searchInput.nextElementSibling.addEventListener('click', () => {
+                performSearch(searchInput.value);
+                searchSuggestions.style.display = 'none';
+            });
+        }
+        
+        function performSearch(query) {
+            // Remove previous highlights
+            document.querySelectorAll('.highlight').forEach(el => {
+                const parent = el.parentNode;
+                parent.replaceChild(document.createTextNode(el.textContent), el);
+                parent.normalize();
+            });
+            
+            if (!query.trim()) return;
+            
+            // Highlight matching text in the entire document
+            const walker = document.createTreeWalker(
+                document.body,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
+            
+            const nodes = [];
+            let node;
+            while (node = walker.nextNode()) {
+                if (node.textContent.toLowerCase().includes(query.toLowerCase()) && 
+                    node.parentNode.nodeName !== 'SCRIPT' && 
+                    node.parentNode.nodeName !== 'STYLE' &&
+                    node.parentNode.nodeName !== 'TEXTAREA' &&
+                    node.parentNode.nodeName !== 'INPUT') {
+                    nodes.push(node);
+                }
+            }
+            
+            nodes.forEach(node => {
+                const span = document.createElement('span');
+                span.className = 'highlight';
+                
+                const text = node.textContent;
+                const regex = new RegExp(`(${query})`, 'gi');
+                const newText = text.replace(regex, '<mark>$1</mark>');
+                
+                span.innerHTML = newText;
+                node.parentNode.replaceChild(span, node);
+            });
+            
+            // Show notification
+            showNotification(`Found ${nodes.length} matches for "${query}"`);
+        }
+        
+        // Notifications functionality
+            function initNotifications() {
+                const notifIcon = document.getElementById('notificationIcon');
+                const notifDropdown = document.getElementById('notificationDropdown');
+                const notifBadge = document.querySelector('.notification-badge');
+                
+                // Toggle notification dropdown
+                notifIcon.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    notifDropdown.classList.toggle('active');
+                });
+                
+                // Close notification dropdown when clicking elsewhere
+                document.addEventListener('click', (e) => {
+                    if (!notifDropdown.contains(e.target) && !notifIcon.contains(e.target)) {
+                        notifDropdown.classList.remove('active');
+                    }
+                });
+                
+                // Update notifications every 10 seconds
+                setInterval(() => {
+                    const notifications = [
+                        {title: "New message from Space Enthusiasts group", icon: "M"},
+                        {title: "Your post got 5 new likes", icon: "L"},
+                        {title: "Upcoming webinar: AI in Cybersecurity", icon: "W"},
+                        {title: "Marketplace: New product from Sentinel Labs", icon: "S"},
+                        {title: "Weekly digest: Top posts this week", icon: "D"},
+                        {title: "Friend request from Alex Johnson", icon: "A"},
+                        {title: "Live event starting soon: Coffee Brewing Masterclass", icon: "C"}
+                    ];
+                    
+                    // Randomly add a new notification
+                    if (Math.random() > 0.5) {
+                        const notificationList = document.getElementById('notificationList');
+                        if (notificationList.querySelectorAll('.notification-item').length < 10) {
+                            const randomNotif = notifications[Math.floor(Math.random() * notifications.length)];
+                            const newNotification = document.createElement('div');
+                            newNotification.className = 'notification-item unread';
+                            newNotification.innerHTML = `
+                                <div class="user-avatar" style="width:30px; height:30px; font-size:0.8rem;">${randomNotif.icon}</div>
+                                <div class="notif-content">
+                                    <h5>${randomNotif.title}</h5>
+                                    <p>Just now</p>
+                                </div>
+                            `;
+                            notificationList.insertBefore(newNotification, notificationList.firstChild);
+                            
+                            // Update badge count
+                            let currentCount = parseInt(notifBadge.textContent);
+                            notifBadge.textContent = currentCount + 1;
+                            
+                            // Add animation to badge
+                            notifBadge.style.animation = 'pulse-red 0.5s';
+                            setTimeout(() => {
+                                notifBadge.style.animation = '';
+                            }, 500);
+                        }
+                    }
+                }, 10000);
+            }
+        
+        // Hamburger menu toggle
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+            mainContent.classList.toggle('expanded');
+            
+            const icon = menuToggle.querySelector('i');
+            if (sidebar.classList.contains('hidden')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-chevron-right');
+            } else {
+                icon.classList.remove('fa-chevron-right');
+                icon.classList.add('fa-bars');
+            }
+            
+            awardPoints('daily_login');
+        });
+        
+        // Create Post Button
+        createPostBtn.addEventListener('click', () => {
+            createPostModal.style.display = 'flex';
+            awardPoints('post');
+        });
+        
+        // Close create post modal
+        cancelPostBtn.addEventListener('click', () => {
+            createPostModal.style.display = 'none';
+            postContent.value = '';
+        });
+        
+        // Submit post
+        submitPostBtn.addEventListener('click', () => {
+            const content = postContent.value.trim();
+            if (content) {
+                // Create new post
+                const newPost = document.createElement('div');
+                newPost.className = 'post-card';
+                newPost.innerHTML = `
+                    <div class="post-header">
+                        <div class="post-avatar color-1">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="post-info">
+                            <h3>You</h3>
+                            <p>Just now · <i class="fas fa-globe-americas"></i> Public</p>
+                        </div>
+                    </div>
+                    
+                    <div class="post-content">
+                        <p>${content}</p>
+                        ${content.toLowerCase().includes('coffee') ? 
+                            '<img src="https://placehold.co/600x300/4A6FFF/FFFFFF?text=Your+Post" alt="Post Image" class="post-image">' : ''}
+                    </div>
+                    
+                    <div class="post-actions">
+                        <button class="action-btn like-btn">
+                            <i class="far fa-heart"></i> 0
+                        </button>
+                        <button class="action-btn comment-btn">
+                            <i class="far fa-comment"></i> 0
+                        </button>
+                        <button class="action-btn share-btn">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                        <button class="action-btn save-btn">
+                            <i class="far fa-bookmark"></i> Save
+                        </button>
+                    </div>
+                    
+                    <div class="comments-section">
+                        <div class="add-comment">
+                            <input type="text" placeholder="Write a comment...">
+                            <button>Post</button>
+                        </div>
+                    </div>
+                `;
+                
+                // Insert at the beginning of feed
+                const businessFeed = document.getElementById('businessFeed');
+                const firstPost = businessFeed.querySelector('.post-card');
+                businessFeed.insertBefore(newPost, firstPost);
+                
+                // Close modal and reset
+                createPostModal.style.display = 'none';
+                postContent.value = '';
+                showNotification('Post published successfully!');
+                
+                // Reattach event listeners for new post
+                setTimeout(setupReactions, 100);
+            }
+        });
+        
+        // Close create post modal when clicking outside
+        createPostModal.addEventListener('click', (e) => {
+            if (e.target === createPostModal) {
+                createPostModal.style.display = 'none';
+                postContent.value = '';
+            }
+        });
+        
+        // Data Saver Toggle
+        dataSaverToggle.addEventListener('click', () => {
+            document.body.classList.toggle('data-saver-mode');
+            const icon = dataSaverToggle.querySelector('i');
+            if (document.body.classList.contains('data-saver-mode')) {
+                icon.style.color = 'var(--accent)';
+                showNotification('Data saver mode enabled');
+            } else {
+                icon.style.color = '';
+                showNotification('Data saver mode disabled');
+            }
+        });
+        
+        // Chatbot functionality
+        chatbotToggle.addEventListener('click', () => {
+            chatbotWindow.style.display = 'flex';
+            chatbotInput.focus();
+        });
+        
+        closeChatbot.addEventListener('click', () => {
+            chatbotWindow.style.display = 'none';
+        });
+        
+        // Close chatbot when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!chatbotWindow.contains(e.target) && !chatbotToggle.contains(e.target)) {
+                chatbotWindow.style.display = 'none';
+            }
+        });
+        
+        sendMessageBtn.addEventListener('click', sendMessage);
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        function sendMessage() {
+            const message = chatbotInput.value.trim();
+            if (!message) return;
+            
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user-message';
+            userMessage.textContent = message;
+            chatbotBody.appendChild(userMessage);
+            
+            chatbotInput.value = '';
+            
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'typing-indicator';
+            typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+            chatbotBody.appendChild(typingIndicator);
+            
+            chatbotBody.scrollTop = chatbotBody.scrollHeight;
+            
+            setTimeout(() => {
+                typingIndicator.remove();
+                
+                const botResponse = getBotResponse(message);
+                const botMessage = document.createElement('div');
+                botMessage.className = 'message bot-message';
+                botMessage.textContent = botResponse;
+                chatbotBody.appendChild(botMessage);
+                
+                chatbotBody.scrollTop = chatbotBody.scrollHeight;
+            }, 1000 + Math.random() * 1000);
+        }
+        
+        function getBotResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('sentinel') || lowerMessage.includes('labs')) {
+                return "Sentinel Labs is our advanced cybersecurity research division. We focus on threat intelligence, zero-day vulnerability research, and next-generation security solutions. We've protected 156 enterprise clients from advanced threats. Check the feed for latest updates!";
+            }
+            
+            if (lowerMessage.includes('events')) {
+                return "Upcoming events include the Navyug Space launch on Feb 15 and EduNova webinar on Feb 10. Would you like to RSVP?";
+            }
+            
+            if (lowerMessage.includes('marketplace')) {
+                return "Our marketplace features products from all subsidiaries. From coffee blends to tech gadgets - what are you looking for?";
+            }
+            
+            if (lowerMessage.includes('watch') || lowerMessage.includes('video')) {
+                return "Check out the Watch section for video content from all our businesses! Latest videos include space launches, tech demos, and brewing guides.";
+            }
+            
+            if (lowerMessage.includes('groups') || lowerMessage.includes('community')) {
+                return "Join our community groups! We have groups for Startup Founders, Tech Innovators, Space Enthusiasts, and Food & Beverage professionals.";
+            }
+            
+            if (lowerMessage.includes('points') || lowerMessage.includes('reward')) {
+                return `You have ${userPointsCount} points! Earn more by engaging with posts, commenting, sharing, and logging in daily.`;
+            }
+            
+            if (lowerMessage.includes('dark') || lowerMessage.includes('light') || lowerMessage.includes('theme')) {
+                return "You can toggle between dark and light mode using the moon/sun icon in the top navigation bar.";
+            }
+            
+            if (lowerMessage.includes('search')) {
+                return "Use the search bar to find anything across Web Binary. It searches through all our content and highlights matches.";
+            }
+            
+            const responses = [
+                "Check out the trending topics in the sidebar for hot discussions!",
+                "Have you seen the latest poll in the feed? Cast your vote!",
+                "Join a group in the sidebar to connect with like-minded professionals.",
+                "Explore the marketplace for exclusive Web Binary products and services.",
+                "Don't forget to check Stories for live updates from our businesses!"
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+        
+        function addQuickReplies() {
+            const quickReplies = [
+                "Tell me about upcoming events",
+                "Show me cybersecurity updates",
+                "What's trending?",
+                "Connect me with support",
+                "Investment opportunities",
+                "How to earn points?"
+            ];
+            
+            const quickReplyContainer = document.createElement('div');
+            quickReplyContainer.className = 'quick-replies';
+            
+            quickReplies.forEach(reply => {
+                const btn = document.createElement('button');
+                btn.className = 'quick-reply-btn';
+                btn.textContent = reply;
+                btn.onclick = () => {
+                    chatbotInput.value = reply;
+                    sendMessage();
+                };
+                quickReplyContainer.appendChild(btn);
+            });
+            
+            chatbotBody.appendChild(quickReplyContainer);
+        }
+        
+        // Sidebar items to modal
+        sidebarItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const business = this.getAttribute('data-business');
+                openBusinessModal(business);
+                awardPoints('explore');
+            });
+        });
+        
+        // Close modal
+        closeModal.addEventListener('click', () => {
+            businessModal.style.display = 'none';
+        });
+        
+        businessModal.addEventListener('click', (e) => {
+            if (e.target === businessModal) {
+                businessModal.style.display = 'none';
+            }
+        });
+        
+        // Open business modal
+        function openBusinessModal(business) {
+            // In a real app, you would fetch business data from an API
+            const businessData = {
+                'sentinel': {
+                    title: 'Sentinel Labs',
+                    subtitle: 'Cybersecurity Operations & Active Defense',
+                    color: 'color-9',
+                    icon: 'fas fa-shield-alt',
+                    content: '<p>Sentinel Labs serves as the strategic nerve center for Web Binary’s cybersecurity operations, providing 24/7/365 Managed Detection and Response (MDR) and active defense capabilities. Our mission is to safeguard global digital infrastructures by operating a state-of-the-art Security Operations Center (SOC) that monitors, analyzes, and neutralizes threats in real-time. We go beyond traditional digital forensics, incorporating threat hunting, vulnerability management, and automated incident response protocols aligned with NIST and ISO/IEC 27001 standards. Under the legal framework of the Computer Crimes Act No. 24 of 2007, Sentinel Labs ensures that our clients critical assets are protected by an unyielding wall of technical expertise and operational excellence, maintaining business continuity in an increasingly hostile digital landscape.</p>'
+                },
+                'edunova': {
+                    title: 'Edunova',
+                    subtitle: 'Democratizing Knowledge through Secure Innovation',
+                    color: 'color-10',
+                    icon: 'fas fa-rocket',
+                    content: '<p>EduNova serves as the intellectual engine of the Web Binary ecosystem, committed to democratizing high-level technical knowledge through secure, research-backed educational platforms. Our mission is to bridge the gap between academic theory and industrial application by providing project-based learning environments that foster innovation and accountability. We strictly adhere to the Personal Data Protection Act (PDPA) No. 09 of 2022, ensuring a secure and private space for global research collaboration and skill development. By cultivating a community of lifelong learners and technical experts, EduNova aims to shape the future of the digital economy through transparency, ethical inquiry, and excellence in education.</p>'
+                },
+                'navyug': {
+                    title: 'Navyug Space',
+                    subtitle: 'Pioneering the Future of Aerospace Research',
+                    color: 'color-11',
+                    icon: 'fas fa-shield-alt',
+                    content: '<p>Navyug Space is a pioneering research division focused on the development of next-generation aerospace technologies and the exploration of extraterrestrial frontiers. Our mission is to facilitate international scientific collaboration in satellite technology, orbital mechanics, and propulsion systems while maintaining the highest levels of data integrity and ethical transparency. We operate in full alignment with the Export Control Compliance Policy (ECCP) and international aerospace regulations, ensuring that our research is both globally impactful and legally fortified. Navyug Space is dedicated to pushing the boundaries of human knowledge, turning the complexities of space exploration into sustainable opportunities for global advancement.</p>'
+                },
+                'mercurion': {
+                    title: 'Mercurion Labs',
+                    subtitle: 'Accelerating Discovery through Ethical Research',
+                    color: 'color-12',
+                    icon: 'fas fa-shield-alt',
+                    content: '<p>Mercurion Labs is the core research and development arm of Web Binary, specializing in high-integrity data analysis, quantum-ready algorithms, and experimental software architecture. Our mission is to transform complex theoretical concepts into practical, market-ready innovations through a rigorous "Privacy by Design" framework. Every project at Mercurion Labs is conducted under the Research Ethics and Integrity Policy, ensuring that data collection and processing meet the stringent requirements of the GDPR and local Sri Lankan laws. We provide the technical foundation for all Web Binary subsidiaries, acting as an incubator for breakthroughs that define the next era of professional technology.</p>'
+                },
+                'caffe': {
+                    title: 'Caffe Tara',
+                    subtitle: 'Crafting Connections through Artisanal Excellence',
+                    color: 'color-13',
+                    icon: 'fas fa-shield-alt',
+                    content: '<p>Caffe Tara is an artisanal barista shop and professional hub designed to foster creativity and networking within the Web Binary ecosystem. Our mission is to provide a high-quality "Third Space" where professionals can find mental clarity and connection over expertly crafted coffee. We focus on sustainability, ethical sourcing, and the science of the perfect brew, creating an environment that balances productivity with relaxation. Caffe Tara acts as the social heart of our corporate campus, offering a space for informal collaboration and the exchange of ideas among researchers, developers, and entrepreneurs. By maintaining the highest standards of quality and service, Caffe Tara ensures that every cup served contributes to a culture of excellence and community engagement.</p>'
+                },
+                'saffron': {
+                    title: 'Saffron Soul',
+                    subtitle: 'Fine Dining & Corporate Hospitality',
+                    color: 'color-14',
+                    icon: 'fas fa-shield-alt',
+                    content: '<p>Saffron Soul is a premium restaurant dedicated to the highest standards of culinary excellence and corporate hospitality. Our mission is to provide an elite dining environment that serves as a Safe Harbor for high-level business negotiations, networking, and cultural engagement. We combine traditional flavors with modern culinary precision, ensuring that every guest experiences the same level of quality and attention to detail that characterizes the Web Binary brand. By prioritizing health, safety, and sensory excellence, Saffron Soul provides the perfect atmosphere for professionals to build lasting relationships outside of the technical workspace, grounded in a culture of luxury and mutual respect.</p>'
+                }
+            };
+            
+            const data = businessData[business] || businessData['sentinel'];
+            
+            document.getElementById('modalTitle').textContent = data.title;
+            document.getElementById('modalSubtitle').textContent = data.subtitle;
+            document.getElementById('modalAvatar').className = `modal-avatar ${data.color}`;
+            document.getElementById('modalAvatar').innerHTML = `<i class="${data.icon}"></i>`;
+            document.getElementById('modalContent').innerHTML = data.content;
+            
+            businessModal.style.display = 'flex';
+        }
+        
+        // Scroll effect for top nav
+        window.addEventListener('scroll', () => {
+            const topNav = document.querySelector('.top-nav');
+            if (window.scrollY > 50) {
+                topNav.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+            } else {
+                topNav.style.boxShadow = 'none';
+            }
+        });
+        
+        // Infinite Scroll
+        function setupInfiniteScroll() {
+            window.addEventListener('scroll', () => {
+                if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !isLoading) {
+                    loadMorePosts();
+                }
+            });
+        }
+        
+        function loadMorePosts() {
+            isLoading = true;
+            loadingIndicator.style.display = 'block';
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                // Generate more posts
+                for (let i = 0; i < postsPerPage; i++) {
+                    const newPost = createRandomPost();
+                    businessFeed.insertBefore(newPost, loadingIndicator);
+                }
+                
+                loadingIndicator.style.display = 'none';
+                isLoading = false;
+                page++;
+                
+                // Reattach event listeners for new posts
+                setupReactions();
+            }, 1500);
+        }
+        
+        function createRandomPost() {
+            const businesses = [
+                { name: 'Caffe Tara', icon: 'fas fa-coffee', color: 'color-13' },
+                { name: 'Saffron Soul', icon: 'fas fa-utensils', color: 'color-14' },
+                { name: 'Mercurion Labs', icon: 'fas fa-atom', color: 'color-12' },
+                { name: 'EduNova', icon: 'fas fa-graduation-cap', color: 'color-10' }
+            ];
+            
+            const business = businesses[Math.floor(Math.random() * businesses.length)];
+            const likeCount = Math.floor(Math.random() * 100) + 50;
+            const commentCount = Math.floor(Math.random() * 30) + 10;
+            
+            const post = document.createElement('div');
+            post.className = 'post-card';
+            post.innerHTML = `
+                <div class="post-header">
+                    <div class="post-avatar ${business.color}">
+                        <i class="${business.icon}"></i>
+                    </div>
+                    <div class="post-info">
+                        <h3>${business.name}</h3>
+                        <p>${Math.floor(Math.random() * 5) + 1} hours ago · <i class="fas fa-globe-americas"></i> Public</p>
+                    </div>
+                </div>
+                
+                <div class="post-content">
+                    <h2>New Update from ${business.name}</h2>
+                    <p>Exciting developments happening at ${business.name}! We're pushing boundaries and innovating in our field. Stay tuned for more updates coming soon.</p>
+                    <img src="https://placehold.co/600x400/4A6FFF/FFFFFF?text=${encodeURIComponent(business.name)}+Update" alt="Update" class="post-image">
+                    
+                    <div class="business-tags">
+                        <span class="business-tag">#Innovation</span>
+                        <span class="business-tag">#Update</span>
+                        <span class="business-tag">#Progress</span>
+                    </div>
+                </div>
+                
+                <div class="post-actions">
+                    <button class="action-btn reaction-btn">
+                        <i class="far fa-thumbs-up"></i> ${likeCount}
+                        <div class="reactions-container">
+                            <span class="reaction">👍</span>
+                            <span class="reaction">❤️</span>
+                            <span class="reaction">😮</span>
+                            <span class="reaction">😆</span>
+                            <span class="reaction">😢</span>
+                            <span class="reaction">😡</span>
+                        </div>
+                    </button>
+                    <button class="action-btn comment-btn">
+                        <i class="far fa-comment"></i> ${commentCount}
+                    </button>
+                    <button class="action-btn share-btn">
+                        <i class="fas fa-share"></i> Share
+                    </button>
+                    <button class="action-btn save-btn">
+                        <i class="far fa-bookmark"></i> Save
+                    </button>
+                </div>
+                
+                <div class="comments-section">
+                    <div class="add-comment">
+                        <input type="text" placeholder="Write a comment...">
+                        <button>Post</button>
+                    </div>
+                </div>
+            `;
+            
+            return post;
+        }
+        
+        // Setup reactions and interactive elements
+        function setupReactions() {
+            // Like buttons
+            document.querySelectorAll('.like-btn, .reaction-btn').forEach(btn => {
+                // Avoid multiple listeners
+                const newBtn = btn.cloneNode(true);
+                btn.parentNode.replaceChild(newBtn, btn);
+                
+                newBtn.addEventListener('click', function(e) {
+                    // Prevent event propagation if clicking on reactions container
+                    if (e.target.closest('.reactions-container')) return;
+                    
+                    const icon = this.querySelector('i');
+                    // Find text node for counting
+                    const textNode = Array.from(this.childNodes).find(node => node.nodeType === 3);
+                    
+                    let count = 0;
+                    if (textNode) {
+                        const matches = textNode.textContent.match(/\d+/);
+                        if (matches) count = parseInt(matches[0]);
+                    }
+                    
+                    if (icon.classList.contains('far')) {
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                        icon.style.color = 'var(--secondary)';
+                        if (!isNaN(count)) count++;
+                        if (textNode) textNode.textContent = ` ${count}`;
+                        this.classList.add('liked');
+                        showNotification('Post liked!');
+                        awardPoints('like');
+                    } else {
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                        icon.style.color = '';
+                        if (!isNaN(count) && count > 0) count--;
+                        if (textNode) textNode.textContent = ` ${count}`;
+                        this.classList.remove('liked');
+                        showNotification('Like removed');
+                    }
+                });
+                
+                // Re-attach hover for reaction container
+                newBtn.addEventListener('mouseenter', function() {
+                    const reactionsContainer = this.querySelector('.reactions-container');
+                    if (reactionsContainer) {
+                        reactionsContainer.style.display = 'flex';
+                    }
+                });
+                
+                newBtn.addEventListener('mouseleave', function() {
+                    const reactionsContainer = this.querySelector('.reactions-container');
+                    if (reactionsContainer) {
+                        setTimeout(() => {
+                            reactionsContainer.style.display = 'none';
+                        }, 1000);
+                    }
+                });
+            });
+            
+            // Reaction emojis click
+            document.querySelectorAll('.reaction').forEach(reaction => {
+                const newReaction = reaction.cloneNode(true);
+                reaction.parentNode.replaceChild(newReaction, reaction);
+                
+                newReaction.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const btn = this.closest('.reaction-btn');
+                    const icon = btn.querySelector('i');
+                    
+                    // Update count
+                    const textNode = Array.from(btn.childNodes).find(node => node.nodeType === 3);
+                    let count = 0;
+                    if (textNode) {
+                        const matches = textNode.textContent.match(/\d+/);
+                        if (matches) count = parseInt(matches[0]);
+                    }
+                    
+                    if (icon.classList.contains('far')) {
+                        count++;
+                        if (textNode) textNode.textContent = ` ${count}`;
+                    }
+                    
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    icon.className = 'fas fa-thumbs-up'; // Default to thumbs up
+                    icon.style.color = 'var(--secondary)';
+                    
+                    btn.classList.add('liked');
+                    showNotification('Reaction added! +10 points');
+                    awardPoints('like');
+                    
+                    this.parentElement.style.display = 'none';
+                });
+            });
+            
+            // Comment Toggle buttons
+            document.querySelectorAll('.comment-btn').forEach(btn => {
+                const newBtn = btn.cloneNode(true);
+                btn.parentNode.replaceChild(newBtn, btn);
+                
+                newBtn.addEventListener('click', function() {
+                    const postCard = this.closest('.post-card');
+                    const commentsSection = postCard.querySelector('.comments-section');
+                    
+                    if (commentsSection.style.display === 'none' || commentsSection.style.display === '') {
+                        commentsSection.style.display = 'block';
+                    } else {
+                        commentsSection.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Share buttons
+            document.querySelectorAll('.share-btn').forEach(btn => {
+                const newBtn = btn.cloneNode(true);
+                btn.parentNode.replaceChild(newBtn, btn);
+                
+                newBtn.addEventListener('click', function() {
+                    // Simulate link generation
+                    const dummyId = Math.floor(Math.random() * 1000000);
+                    const link = `https://webbinary.net/post/${dummyId}`;
+                    
+                    navigator.clipboard.writeText(link).then(() => {
+                        showNotification('Link copied to clipboard!');
+                    });
+                    awardPoints('share');
+                });
+            });
+            
+            // Save buttons
+            document.querySelectorAll('.save-btn').forEach(btn => {
+                const newBtn = btn.cloneNode(true);
+                btn.parentNode.replaceChild(newBtn, btn);
+                
+                newBtn.addEventListener('click', function() {
+                    const icon = this.querySelector('i');
+                    if (icon.classList.contains('far')) {
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                        this.classList.add('saved'); // Add highlighted class
+                        showNotification('Post saved to collections!');
+                        awardPoints('save');
+                    } else {
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                        this.classList.remove('saved'); // Remove highlighted class
+                        showNotification('Post removed from collections');
+                    }
+                });
+            });
+            
+            // Vote buttons
+            document.querySelectorAll('.vote-btn').forEach(btn => {
+                const newBtn = btn.cloneNode(true);
+                btn.parentNode.replaceChild(newBtn, btn);
+                
+                newBtn.addEventListener('click', function() {
+                    const pollContainer = this.closest('.poll-container');
+                    const selectedOption = pollContainer.querySelector('input:checked');
+                    
+                    if (selectedOption) {
+                        this.textContent = 'Voted!';
+                        this.style.backgroundColor = 'var(--accent)';
+                        showNotification('Thank you for voting! +15 points');
+                        awardPoints('vote');
+                    } else {
+                        showNotification('Please select an option first');
+                    }
+                });
+            });
+            
+            // Comment functionality
+            document.querySelectorAll('.add-comment button').forEach(btn => {
+                const newBtn = btn.cloneNode(true);
+                btn.parentNode.replaceChild(newBtn, btn);
+                
+                newBtn.addEventListener('click', function() {
+                    const commentInput = this.previousElementSibling;
+                    const commentText = commentInput.value.trim();
+                    
+                    if (commentText) {
+                        const commentsSection = this.closest('.comments-section');
+                        const commentDiv = document.createElement('div');
+                        commentDiv.className = 'comment';
+                        commentDiv.innerHTML = `
+                            <div class="comment-avatar">Y</div>
+                            <div class="comment-content">
+                                <div class="comment-author">You</div>
+                                <p>${commentText}</p>
+                            </div>
+                        `;
+                        
+                        const addCommentDiv = commentsSection.querySelector('.add-comment');
+                        commentsSection.insertBefore(commentDiv, addCommentDiv);
+                        commentInput.value = '';
+                        
+                        // Update comment count
+                        const postCard = this.closest('.post-card');
+                        const commentCountBtn = postCard.querySelector('.comment-btn');
+                        
+                        const textNode = Array.from(commentCountBtn.childNodes).find(node => node.nodeType === 3);
+                        let count = 0;
+                        if (textNode) {
+                            const matches = textNode.textContent.match(/\d+/);
+                            if (matches) count = parseInt(matches[0]);
+                        }
+                        
+                        count++;
+                        if (textNode) textNode.textContent = ` ${count}`;
+                        
+                        showNotification('Comment added!');
+                        awardPoints('comment');
+                    }
+                });
+            });
+            
+            // Comment input enter key
+            document.querySelectorAll('.add-comment input').forEach(input => {
+                const newInput = input.cloneNode(true);
+                input.parentNode.replaceChild(newInput, input);
+                
+                newInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        this.nextElementSibling.click();
+                    }
+                });
+            });
+        }
+        
+        // Gamification
+        function awardPoints(action) {
+            const pointsMap = {
+                'like': 10,
+                'comment': 20,
+                'share': 30,
+                'post': 50,
+                'daily_login': 5,
+                'vote': 15,
+                'save': 5,
+                'explore': 10
+            };
+            
+            userPointsCount += pointsMap[action] || 0;
+            updatePointsDisplay();
+        }
+        
+        function updatePointsDisplay() {
+            userPoints.textContent = userPointsCount + ' pts';
+            
+            // Add animation
+            userPoints.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                userPoints.style.transform = 'scale(1)';
+            }, 300);
+        }
+        
+        // Real-time updates simulation
+        function simulateLiveUpdates() {
+            setInterval(() => {
+                // Randomly update like counts
+                const likeButtons = document.querySelectorAll('.like-btn');
+                if (likeButtons.length > 0 && Math.random() > 0.7) {
+                    const randomBtn = likeButtons[Math.floor(Math.random() * likeButtons.length)];
+                    
+                    const textNode = Array.from(randomBtn.childNodes).find(node => node.nodeType === 3);
+                    if (textNode) {
+                        const matches = textNode.textContent.match(/\d+/);
+                        if (matches) {
+                            const count = parseInt(matches[0]) + 1;
+                            textNode.textContent = ` ${count}`;
+                            
+                            const icon = randomBtn.querySelector('i');
+                            icon.classList.remove('far');
+                            icon.classList.add('fas');
+                            randomBtn.classList.add('liked');
+                        }
+                    }
+                }
+                
+                // Update notification badge
+                if (Math.random() > 0.8) {
+                    const current = parseInt(notificationBadge.textContent);
+                    notificationBadge.textContent = current + 1;
+                    notificationBadge.style.animation = 'pulse 1s infinite';
+                    setTimeout(() => notificationBadge.style.animation = '', 2000);
+                    
+                    // Show notification
+                    const notifications = [
+                        'New post from Caffe Tara',
+                        'Event starting in 30 minutes',
+                        'Someone liked your comment',
+                        'New message in Space Enthusiasts group'
+                    ];
+                    
+                    showNotification(notifications[Math.floor(Math.random() * notifications.length)]);
+                }
+                
+                // Update live viewers
+                const liveViewers = document.querySelectorAll('.live-viewers');
+                if (liveViewers.length > 0 && Math.random() > 0.8) {
+                    liveViewers.forEach(viewer => {
+                        const current = parseInt(viewer.textContent);
+                        if (!isNaN(current)) {
+                            const change = Math.floor(Math.random() * 50) - 25;
+                            const newCount = Math.max(100, current + change);
+                            viewer.textContent = newCount.toLocaleString() + ' watching';
+                        }
+                    });
+                }
+            }, 10000);
+        }
+        
+        // Show notification
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.top = '80px';
+            notification.style.right = '20px';
+            notification.style.backgroundColor = 'var(--card-bg)';
+            notification.style.color = 'var(--text-dark)';
+            notification.style.padding = '15px 20px';
+            notification.style.borderRadius = 'var(--radius)';
+            notification.style.boxShadow = 'var(--shadow-lg)';
+            notification.style.zIndex = '9999';
+            notification.style.borderLeft = '4px solid var(--primary)';
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        
+        // Initialize chatbot welcome
+        setTimeout(() => {
+            const welcomeMsg = document.createElement('div');
+            welcomeMsg.className = 'message bot-message';
+            welcomeMsg.textContent = "Welcome to Web Binary Business Network! Scroll through the feed for updates from all our businesses. Don't forget to check Stories and vote in polls!";
+            chatbotBody.appendChild(welcomeMsg);
+        }, 1000);
+        
+        // Story interactions
+        document.querySelectorAll('.story-item').forEach(story => {
+            story.addEventListener('click', function() {
+                showNotification('Story viewed! +5 points');
+                awardPoints('explore');
+            });
+        });
+   
+   
+   
+   //Premiup PopUp
+   document.addEventListener('DOMContentLoaded', function() {
+    // 1. Get Elements
+    const premiumModal = document.getElementById('premiumModal');
+    const closePremiumBtn = document.getElementById('closePremiumModal');
+    const dismissPremiumBtn = document.getElementById('dismissPremium');
+
+    // 2. Define the exact text of items that should trigger the popup
+    // This list matches the links you asked to protect
+    const premiumKeywords = [
+        "Businesses", "Explore", "Network", "Events", 
+        "Marketplace", "Games", "Jobs", "Watch", "Saved",
+        "Today's Events", "Saved Collections"
+    ];
+
+    // 3. Select all potential triggers (Sidebar items and Right Sidebar Headers)
+    const sidebarLinks = document.querySelectorAll('.sidebar-item');
+    const rightSidebarHeaders = document.querySelectorAll('.sidebar-card h3');
+
+    // 4. Function to open modal
+    function openPremiumModal(e) {
+        e.preventDefault(); // Stop the link from working
+        e.stopPropagation(); // Stop other events
+        
+        premiumModal.classList.add('active');
+        
+        // Optional: Add a subtle wobble animation to the crown
+        const crown = premiumModal.querySelector('.premium-icon-glow');
+        crown.style.animation = 'none';
+        crown.offsetHeight; /* trigger reflow */
+        crown.style.animation = 'premium-pulse 2s infinite';
+    }
+
+    // 5. Attach listeners to Left Sidebar items
+    sidebarLinks.forEach(link => {
+        const spanText = link.querySelector('span')?.textContent.trim();
+        if (premiumKeywords.includes(spanText)) {
+            link.addEventListener('click', openPremiumModal);
+            // Optional: Add a visual indicator class if needed
+            link.classList.add('is-premium'); 
+        }
+    });
+
+    // 6. Attach listeners to Right Sidebar headers
+    // Note: Headers usually aren't clickable, but if you want them to react:
+    rightSidebarHeaders.forEach(header => {
+        // Check if header text contains keywords
+        const headerText = header.innerText.trim();
+        if (premiumKeywords.some(keyword => headerText.includes(keyword))) {
+            header.style.cursor = "pointer"; // Make it look clickable
+            header.addEventListener('click', openPremiumModal);
+        }
+    });
+
+    // 7. Close Logic
+    function closePremium() {
+        premiumModal.classList.remove('active');
+    }
+
+    closePremiumBtn.addEventListener('click', closePremium);
+    dismissPremiumBtn.addEventListener('click', closePremium);
+    
+    // Close on backdrop click
+    premiumModal.addEventListener('click', (e) => {
+        if (e.target === premiumModal) {
+            closePremium();
+        }
+    });
+});
+   
+   
+   
+   
+   </script>
+
+<!-----------------Premium Members Only PopUp------------------------->
+<div class="premium-modal-overlay" id="premiumModal">
+    <div class="premium-modal-card">
+        <div class="premium-modal-close" id="closePremiumModal">
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="premium-icon-glow">
+            <i class="fas fa-crown"></i>
+        </div>
+        <h2>Unlock Premium Access</h2>
+        <p>This feature is exclusive to <strong>Web Binary Premium</strong> members.</p>
+        
+        <ul class="premium-benefits">
+            <li><i class="fas fa-check-circle"></i> Unlimited Marketplace Listings</li>
+            <li><i class="fas fa-check-circle"></i> Exclusive Networking Events</li>
+            <li><i class="fas fa-check-circle"></i> Advanced Analytics Dashboard</li>
+        </ul>
+        
+        <button class="premium-btn-primary">Upgrade to Premium</button>
+        <button class="premium-btn-secondary" id="dismissPremium">Maybe Later</button>
+    </div>
+</div>
+<!-----------------Premium Members Only PopUp------------------------->
+
+
+</body>
+</html>
